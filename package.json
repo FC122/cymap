@@ -1,0 +1,23 @@
+{
+  "name": "cymap",
+  "version": "1.0.0",
+  "description": "Plugin for E2E email testing with cypress",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cymap"
+  ],
+  "author": "Filip Cica",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "imap": "0.8.17",
+    "mailparser": "^3.7.0"
+  },
+  "devDependencies": {
+    "cypress": "13.8.0"
+  }
+}

@@ -1,10 +1,7 @@
 //utils
-Cypress.Commands.add("pasteHtml", ()=>{})
-Cypress.Commands.add("findHref", ()=>{})
-Cypress.Commands.add("parsePdf", ()=>{})//?
-Cypress.Commands.add("parseWord", ()=>{})//?
-Cypress.Commands.add("parseImage", ()=>{})//?
-
+Cypress.Commands.add("pasteHtml", (html)=>{
+    cy.document().invoke('write', html);
+})
 //1
 Cypress.Commands.add("setConnectionConfig", (config)=>{
     cy.task("setConnectionConfig", config)
@@ -15,9 +12,21 @@ Cypress.Commands.add("createConnection", ()=>{
 })
 //3
 Cypress.Commands.add("destroyConnection", (config)=>{
-    cy.task("setConnectionConfig", )
+    cy.task("setConnectionConfig")
 })
 //4
-Cypress.Commands.add("getAllMail", (boxName="INBOX")=>{
+Cypress.Commands.add("getAllMail", ()=>{
     return cy.task("getAllMail")
+})
+//5
+Cypress.Commands.add("deleteAllMail", ()=>{
+    return cy.task("deleteAllMail")
+})
+//6
+Cypress.Commands.add("getEmailByIndex", (index=1)=>{
+    return cy.task("getEmailByIndex", index)
+})
+//7
+Cypress.Commands.add("deleteEmailByIndex", (index=1)=>{
+    return cy.task("deleteEmailByIndex", index)
 })

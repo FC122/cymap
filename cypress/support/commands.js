@@ -1,25 +1,39 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+Cypress.Commands.add('sendMail', (config, data) => { 
+    return cy.task("sendMail", {config:config, data:data})
+})
+
+Cypress.Commands.add('alias', (alias) => { 
+    return Cypress.env("localPart") + alias + Cypress.env("domain")
+})
+
+Cypress.Commands.add("imapConfig", ()=>{
+    return {
+        password:Cypress.env("pass"),
+        user:Cypress.env("user"),
+        host:'imap.gmail.com',
+        port:993,
+        tls:true,
+        tlsOptions: { rejectUnauthorized: false }
+    }
+})
+
+Cypress.Commands.add("smtpConfig", (alias="")=>{
+    return  {
+        auth:{
+          pass: Cypress.env("pass"),
+          user:Cypress.env("localPart") + alias + Cypress.env("domain")
+        },
+        host: 'imap.gmail.com',
+        port: 465,
+        secure: true
+      }
+})
+
+Cypress.Commands.add("sendEmails", (n, email)=>{
+    cy.smtpConfig().then(config=>{
+        for(let i=1;i<=n;i++){
+            cy.sendMail(config, email)
+            cy.wait(1000)
+        }
+    })
+})

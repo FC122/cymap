@@ -5,30 +5,35 @@ class ImapProxy{
     static #config
 
     static setConnectionConfig(config){
-        console.log(config)
-        if(!this.#config && !config){
-            throw new Error("No config")
+        if(!config){
+            throw new Error("Config object empty.")
         }
         this.#config = config
+        console.log("Config set")
+    }
+
+    static createConnection(){
+        if(!this.#config){
+            throw new Error("Connection configuration not set.")
+        }
+        this.#imap = new Imap(this.#config)
+        console.log("Connection created")
     }
 
     /**
      * Retrieves the Imap instance.
      * @returns {Imap} The Imap instance.
      */
-    static createConnection(){
-        if(!this.#imap){
-            this.#imap = new Imap(this.#config)
-        }
-        return this.#imap
-    }
-
     static getConnectionInstance(){
+        if(!this.#imap){
+            throw new Error("Connection not created.")
+        }
         return this.#imap
     }
 
     static destroyConnection(){
         this.#imap=undefined
+        console.log("Connection destroyed")
     }
 }
 

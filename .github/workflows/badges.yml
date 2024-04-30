@@ -1,0 +1,22 @@
+name: badges
+on: workflow_dispatch
+
+jobs:
+  badges:
+    name: Badges
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v4
+
+      - name: Update version badges 🏷
+        run: npm run badges
+
+      - name: Commit any changed files 💾
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Updated badges
+          branch: main
+          file_pattern: README.md

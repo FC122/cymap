@@ -1,5 +1,6 @@
-# cymap
-Enables basic IMAP functionalities in Cypress like fetching and deleting the mail. The point of this plugin is to make testing email content automaticaly in cypress easy.
+# cymap ![cypress version](https://img.shields.io/badge/cypress-13.8.0-brightgreen) [![test](https://github.com/FC122/cymap/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/FC122/cymap/actions/workflows/test.yml)
+
+Enables basic IMAP functionalities in Cypress. The point of the plugin is to make email content testing easy.
 
 ## Install
 
@@ -7,6 +8,29 @@ Enables basic IMAP functionalities in Cypress like fetching and deleting the mai
 npm i -D cymap
 ```
 
+Import cymap tasks in cypress.config.js. and put cymapTasks object in on task.
+```js
+const { defineConfig } = require("cypress");
+const cymapTasks = require("cymap/src/cymapTasks")
+module.exports = defineConfig({
+  e2e: {
+    setupNodeEvents(on, config) {
+      on("task",{
+        ...cymapTasks
+      })
+      // implement node event listeners here
+    },
+  },
+});
+
+```
+
+Import cymap index in e2e.js
+```JS
+// Import commands.js using ES2015 syntax:
+import './commands'
+import "cymap/src/index"
+```
 ## Use
 ### Functions
 #### Set configuration data
@@ -167,4 +191,10 @@ it('returns parsed body', ()=>{
 Filip Cica
 
 ## TODO
-waitForEmail()
+Add waitForEmail()
+
+Improve README.md
+
+Add instructions for setting up gmail
+
+Improve CI

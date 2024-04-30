@@ -27,8 +27,8 @@ module.exports = defineConfig({
       })
     },
     env:{
-        pass:process.env.pass,
-        user:process.env.user,
+        pass:process.env.PASS,
+        user:process.env.USER,
         localPart:"testmailcica",
         domain:"@gmail.com",
         host: 'imap.gmail.com',

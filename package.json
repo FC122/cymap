@@ -5,7 +5,9 @@
   "main": "src/index.js",
   "types": "src/index.d.ts",
   "scripts": {
-    "test": "npx cypress run"
+    "test": "npx cypress run",
+    "badges": "npx -p dependency-version-badge update-badge cypress",
+    "semantic-release": "semantic-release"
   },
   "keywords": [
     "cymap"
@@ -16,7 +18,8 @@
     "dotenv": "^16.4.5",
     "imap": "0.8.17",
     "mailparser": "^3.7.0",
-    "nodemailer": "^6.9.13"
+    "nodemailer": "^6.9.13",
+    "semantic-release": "^23.0.8"
   },
   "devDependencies": {
     "cypress": "13.8.0"

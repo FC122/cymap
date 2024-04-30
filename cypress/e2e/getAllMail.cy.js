@@ -57,6 +57,7 @@ describe('tests getAllMail function', () => {
       expect(err.message).to.contain("Invalid credentials (Failure)")
     })
     cy.getAllMail()
+    cy.destroyConnection()
   })
 
   it('throws an error on invalid host', ()=>{
@@ -72,6 +73,7 @@ describe('tests getAllMail function', () => {
       expect(err.message).to.contain("Invalid host")
     })
     cy.getAllMail()
+    cy.destroyConnection()
   })
 
   it('throws an error on invalid port', ()=>{
@@ -86,6 +88,7 @@ describe('tests getAllMail function', () => {
       expect(err.message).to.contain("Timed out while connecting to server. Make sure that port and tls are set correctly.")
     })
     cy.getAllMail()
+    cy.destroyConnection()
   })
 
   it('throws an error on invalid tls', ()=>{
@@ -100,6 +103,7 @@ describe('tests getAllMail function', () => {
       expect(err.message).to.contain("Timed out while authenticating with server. Make sure that port and tls are set correctly.")
     })
     cy.getAllMail()
+    cy.destroyConnection()
   })
 
   it("throws an error on empty string pass", ()=>{
@@ -115,6 +119,7 @@ describe('tests getAllMail function', () => {
       expect(err.message).to.contain("No supported authentication method(s) available. Unable to login.")
     })
     cy.getAllMail()
+    cy.destroyConnection()
   })
 
   it("throws an error on empty string user", ()=>{
@@ -130,6 +135,7 @@ describe('tests getAllMail function', () => {
       expect(err.message).to.contain("No supported authentication method(s) available. Unable to login.")
     })
     cy.getAllMail()
+    cy.destroyConnection()
   })
 
   it("throws an error on empty string pass and empty string user", ()=>{
@@ -145,6 +151,7 @@ describe('tests getAllMail function', () => {
       expect(err.message).to.contain("No supported authentication method(s) available. Unable to login.")
     })
     cy.getAllMail()
+    cy.destroyConnection()
   })
 
   it('throws an error when setConnectionConfigs is not used', ()=>{

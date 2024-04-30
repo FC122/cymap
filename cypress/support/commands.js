@@ -33,7 +33,11 @@ Cypress.Commands.add("sendEmails", (n, email)=>{
     cy.smtpConfig().then(config=>{
         for(let i=1;i<=n;i++){
             cy.sendMail(config, email)
-            cy.wait(1000)
+            cy.wait(2000)
         }
     })
+})
+
+Cypress.Commands.add("catchStdout", (callback)=>{
+    return cy.task("catchStdout", callback)
 })

@@ -38,6 +38,7 @@ function getAllMail(){
                                 parsedMessages++;
                                 if (parsedMessages === box.messages.total) {
                                     console.log("All messages processed")
+                                    imap.end()
                                     return resolve(messages)
                                 }
                             });
@@ -49,24 +50,30 @@ function getAllMail(){
                     })
                 })
             })
-        imap.once('error', function(err) {
-            console.log(err)
-            return reject(modifyError(err))
-        });
+            imap.once('error', function(err) {
+                console.log(err)
+                return reject(modifyError(err))
+            })
+            imap.once("end", (err)=>{
+                console.log(err)
+                if (err) return reject(err)
+            })
         imap.connect()
     })
 }
 
 function getEmailByIndex(indexOfMailBottomUp=1){
-    return new Promise((resolve) => {
-        ImapProxy.createConnection()    
+    return new Promise((resolve, reject) => {
+        if(indexOfMailBottomUp<=0)return reject(new Error("Index cant be smaller than 1."))
+        ImapProxy.createConnection()
         const imap = ImapProxy.getConnectionInstance()
         imap.once("ready", ()=>{
             imap.openBox("INBOX", true,(err, box)=>{
                 if (err){
                     console.log(err)
-                    throw err;
+                    return reject(err);
                 } 
+                if(box.messages.total===0)return reject(new Error("No emails in the mailbox."))
                 let indexOfMailTopDown=box.messages.total-indexOfMailBottomUp+1
                 console.log("Index of mail top down:"+indexOfMailTopDown)
                 console.log("Total:"+box.messages.total)
@@ -76,19 +83,24 @@ function getEmailByIndex(indexOfMailBottomUp=1){
                     message.on("body", async (stream, info)=>{
                         console.log(info)
                         const mail = await simpleParser(stream)
+                        imap.end()
                         resolve(mail)
                     })
                 })
                 imapFetch.on("error", async (err)=>{   
                     console.log(err)              
-                    if (err) throw err;
+                    if (err) return reject(err);
                 })
             })
         })
-        imap.once('error', function(err) {
-            console.log(err);
-            if (err) throw err;
-        });
+        imap.once('error', (err)=>{
+            console.log(err)
+            return reject(modifyError(err))
+        })
+        imap.once("end", (err)=>{
+            console.log(err)
+            if (err) return reject(err)
+        })
         imap.connect()
     })
 }
@@ -115,12 +127,13 @@ function deleteAllMail(){
                     imap.closeBox((err)=>{
                         console.log(err)
                         if (err) return reject(err)
+                        imap.end()
                         resolve(true)
                     })
                 })  
             })
         })
-        imap.once('error', function(err) {
+        imap.once('error', (err)=>{
             console.log(err)
             if (err) return reject(modifyError(err))
         });
@@ -133,7 +146,8 @@ function deleteAllMail(){
 }
 
 function deleteEmailByIndex(indexOfMailBottomUp=1){
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
+        if(indexOfMailBottomUp<0)return reject(new Error("Negative indexes are not allowed"))
         ImapProxy.createConnection()
         const imap = ImapProxy.getConnectionInstance()
         imap.once("ready", ()=>{
@@ -142,6 +156,8 @@ function deleteEmailByIndex(indexOfMailBottomUp=1){
                     console.log(err)
                     return resolve(err)
                 }
+                if(box.messages.total===0)return reject(new Error("Can't delete message, inbox empty."))
+                if(indexOfMailBottomUp>box.messages.total)return reject(new Error("Can't find the message."))
                 let indexOfMailTopDown=box.messages.total-indexOfMailBottomUp+1
                 console.log("Total:"+box.messages.total)
                 console.log("Index of mail top down:"+indexOfMailTopDown)
@@ -157,24 +173,26 @@ function deleteEmailByIndex(indexOfMailBottomUp=1){
                 })
                 imapFetch.on("end", (err)=>{
                     console.log(err)
-                    if (err) return resolve(err)
+                    if (err) return reject(err)
                     imap.closeBox((err)=>{
                         if (err) {
                             console.log(err)
-                            if (err) return resolve(err)
+                            if (err) return reject(err)
                         }
+                        imap.end()
                         resolve(true)
                     })
                 })
             })
         })
-        imap.once('error', function(err) {
+        
+        imap.once('error', (err)=>{
             console.log(err)
-            return resolve(modifyError(err))
+            return reject(modifyError(err))
         })
         imap.once("end", (err)=>{
             console.log(err)
-            if (err) return resolve(err)
+            if (err) return reject(err)
         })
         imap.connect()
     })
@@ -210,7 +228,7 @@ function waitForMail(){
             })
 
         })
-        imap.once('error', function(err) {
+        imap.once('error', (err)=>{
             console.log(err)
             if (err) throw err;
         });

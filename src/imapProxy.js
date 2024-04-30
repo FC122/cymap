@@ -16,7 +16,11 @@ class ImapProxy{
         if(!this.#config){
             throw new Error("Connection configuration not set.")
         }
-        this.#imap = new Imap(this.#config)
+        try{
+            this.#imap = new Imap(this.#config)
+        }catch(err){
+            console.log(err)
+        }
         console.log("Connection created")
     }
 
@@ -32,7 +36,9 @@ class ImapProxy{
     }
 
     static destroyConnection(){
+        this.#imap.destroy()
         this.#imap=undefined
+        this.#config=undefined
         console.log("Connection destroyed")
     }
 }

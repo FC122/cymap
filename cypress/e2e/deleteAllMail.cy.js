@@ -24,6 +24,21 @@ describe('tests deleteAllMail function', () => {
         })
     })
 
+    it("getAllMail returns 0 after deleteAllMail is called", ()=>{
+      cy.sendEmails(2, emails.helloWorld()).then(()=>{
+        cy.wait(5000)
+        cy.getAllMail().then((emails)=>{
+          expect(emails.length).to.be.gt(0)
+          cy.deleteAllMail().then(()=>{
+            cy.wait(1000)
+            cy.getAllMail().then(emails=>{
+              expect(emails.length).to.eq(0)
+            })
+          })
+        })
+      })
+    })
+
     it('throws an error on wrong credentials', ()=>{
         cy.setConnectionConfig({
           password:"wrongpass",
@@ -37,6 +52,7 @@ describe('tests deleteAllMail function', () => {
           expect(err.message).to.contain("Invalid credentials (Failure)")
         })
         cy.deleteAllMail()
+        cy.destroyConnection()
       })
     
       it('throws an error on invalid host', ()=>{
@@ -52,6 +68,7 @@ describe('tests deleteAllMail function', () => {
           expect(err.message).to.contain("Invalid host")
         })
         cy.deleteAllMail()
+        cy.destroyConnection()
       })
     
       it('throws an error on invalid port', ()=>{
@@ -66,6 +83,7 @@ describe('tests deleteAllMail function', () => {
           expect(err.message).to.contain("Timed out while connecting to server. Make sure that port and tls are set correctly.")
         })
         cy.deleteAllMail()
+        cy.destroyConnection()
       })
     
       it('throws an error on invalid tls', ()=>{
@@ -80,6 +98,7 @@ describe('tests deleteAllMail function', () => {
           expect(err.message).to.contain("Timed out while authenticating with server. Make sure that port and tls are set correctly.")
         })
         cy.deleteAllMail()
+        cy.destroyConnection()
       })
     
       it("throws an error on empty string pass", ()=>{
@@ -95,6 +114,7 @@ describe('tests deleteAllMail function', () => {
           expect(err.message).to.contain("No supported authentication method(s) available. Unable to login.")
         })
         cy.deleteAllMail()
+        cy.destroyConnection()
       })
     
       it("throws an error on empty string user", ()=>{
@@ -110,6 +130,7 @@ describe('tests deleteAllMail function', () => {
           expect(err.message).to.contain("No supported authentication method(s) available. Unable to login.")
         })
         cy.deleteAllMail()
+        cy.destroyConnection()
       })
     
       it("throws an error on empty string pass and empty string user", ()=>{
@@ -125,6 +146,7 @@ describe('tests deleteAllMail function', () => {
           expect(err.message).to.contain("No supported authentication method(s) available. Unable to login.")
         })
         cy.deleteAllMail()
+        cy.destroyConnection()
       })
     
       it('throws an error when setConnectionConfigs is not used', ()=>{

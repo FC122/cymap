@@ -1,0 +1,3 @@
+describe("tests waitForEmail function", ()=>{
+    
+})

@@ -10,7 +10,7 @@
     "semantic-release": "semantic-release"
   },
   "keywords": [
-    "cymap"
+    "cypress-plugin", "IMAP", "SMTP", "cypress", "email-testing", "email"
   ],
   "author": "Filip Cica",
   "license": "ISC",

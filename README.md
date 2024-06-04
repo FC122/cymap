@@ -1,11 +1,19 @@
 # cymap ![cypress version](https://img.shields.io/badge/cypress-13.8.0-brightgreen) [![test](https://github.com/FC122/cymap/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/FC122/cymap/actions/workflows/test.yml)
 
-Enables basic IMAP functionalities in Cypress. The point of the plugin is to make email content testing easy.
+Cypress plugin for accessing mail from email servers.
+
+The purpose of this plugin is to use existing email servers instead of deploying your. Cymap leverages the capabilities of IMAP protocol.
+
+By using cymap:
+- you are not dependant on an email server nor its REST API
+- you have no need to deploy your own email server, you can use gmail or any other similar service
+- if you have your own email server it will work with it to since IMAP is standardized
+- you can access mail from multiple clients
 
 ## Install
 
 ```bash
-npm i -D cymap
+npm i cymap
 ```
 
 Import cymap tasks in cypress.config.js. and put cymapTasks object in on task.
@@ -31,34 +39,36 @@ Import cymap index in e2e.js
 import './commands'
 import "cymap/src/index"
 ```
+### Gmail <IMAP> setup
+Gmail IMAP can be used only with the app password. There are a few steps you need to do to generate the app password. It is required by google for security reasons.
+#### Steps
+1. Go to your inbox
+2. In the upper right corner click the settings icon
+3. Then click "See all settings"
+4. Click on "Forwarding and POP/IMAP"
+5. Scroll down and click "Enable IMAP"
+6. Go to https://myaccount.google.com/u/2/security 
+7. Click on 2-step verification and turn it on
+    - Chose any of the given methods and implement it 
+8. At the bottom og the 2-step verification screen "App passwords" article should be shown.
+9. Go to App passwords screen and create a new password
+10. Remember that password
+    That password along with your email will be used to access emails programmatically
+
 ## Use
 ### Functions
 #### Set configuration data
 ```js
 cy.setConnectionConfig( {
-        password:"socadscjfa",
-        user:"some.gmail@gmail.com",
-        host:'imap.gmail.com',
-        port:993,
-        tls:true,
-        tlsOptions: { rejectUnauthorized: false }
+  password:"socadscjfa",
+  user:"some.gmail@gmail.com",
+  host:'imap.gmail.com',
+  port:993,
+  tls:true,
+  tlsOptions: { rejectUnauthorized: false }
 })
 ```
-Needs to be called in before each.
-
-#### Create connection
-```js
-cy.createConnection()
-```
-Implicitly called inside the email functions.
-
-
-#### Destroy connection
-```js
-cy.destroyConnection()
-```
-Implicitly called inside the email functions.
-
+Ideally called in before each.
 
 #### Fetch all mail
 ```js
@@ -147,14 +157,14 @@ describe('tests getAllMail function', () => {
 })
 ```
 
-#### Fetch a mail and paste it to dom
+#### Fetch an email and paste it to dom
 ```js
  before("Set configs and add mail", ()=>{
     cy.setConnectionConfig(config)
   })
 
   it('returns parsed body', ()=>{
-    cy.getEmailByIndex().then(email=>{
+    cy.getEmailByIndex(1).then(email=>{
         cy.pasteHtml(email.html)
         cy.contains("Hello World").should("be.visible")
     })
@@ -191,10 +201,10 @@ it('returns parsed body', ()=>{
 Filip Cica
 
 ## TODO
+Add waitForEmailWithSubject()
+
+Add getEmailBySubject()
+
+Add methods for parsing various attachments
+
 Add waitForEmail()
-
-Improve README.md
-
-Add instructions for setting up gmail
-
-Improve CI

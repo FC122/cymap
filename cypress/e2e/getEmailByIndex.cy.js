@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import emails from "../support/emails"
 
-describe('tests deleteEmailByIndex function', () => {
+describe('tests getEmailByIndex function', () => {
     before("Set configs and add mail", ()=>{
         cy.imapConfig().then(config=>{
           cy.setConnectionConfig(config)

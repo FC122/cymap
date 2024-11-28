@@ -1,5 +1,5 @@
 const simpleParser = require("mailparser").simpleParser
-const ImapProxy = require("./ImapProxy")
+const ImapProxy = require("./imapProxy")
 
 const modifyError=(err)=>{
     if(err.message.includes("ENOTFOUND")){

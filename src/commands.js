@@ -105,7 +105,7 @@ function getEmailByIndex(indexOfMailBottomUp = 1) {
   })
 }
 
-function getEmailBySubject(subject) {
+function getEmailBySubject(subject = "") {
   console.log("subject: ", subject)
   return new Promise((resolve, reject) => {
     if (!subject.length) return reject(new Error("Subject required but not provided"))

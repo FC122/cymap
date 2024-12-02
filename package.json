@@ -1,6 +1,6 @@
 {
   "name": "cymap",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Plugin for E2E email testing with cypress",
   "main": "src/index.js",
   "types": "src/index.d.ts",

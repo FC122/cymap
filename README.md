@@ -90,6 +90,11 @@ cy.getEmailByIndex(1)
 ```
 Fetches email by index top down. Top email in the INBOX is under index 1.
 
+#### Get email by subject
+```js
+cy.getEmailBySubject("Hello World")
+```
+Fetches email by subject.
 
 #### Delete email by index
 ```js
@@ -157,7 +162,7 @@ describe('tests getAllMail function', () => {
 })
 ```
 
-#### Fetch an email and paste it to dom
+#### Fetch email and paste it to dom
 ```js
  before("Set configs and add mail", ()=>{
     cy.setConnectionConfig(config)
@@ -200,9 +205,9 @@ it('returns parsed body', ()=>{
 ## Contributors
 Filip Cica
 
-## TODO
-Add waitForEmailWithSubject()
+Sean Auditor
 
+## TODO
 Add getEmailBySubject()
 
 Add methods for parsing various attachments
